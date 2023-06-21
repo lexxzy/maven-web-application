@@ -94,13 +94,13 @@
 	    <repository>
 	      <id>nexus</id>
 	      <name>Landmark Technologies Releases Nexus Repository</name>
-	      <url>http://20.127.164.138:8082/artifactory/libs-release/</url>
+	      <url>http://20.127.164.138:8082/artifactory/libs-release-local/</url>
 	    </repository>
 	    
 	    <snapshotRepository>
 	      <id>nexus</id>
 	      <name>Landmark Technologies Snapshot Nexus Repository </name>
-	      <url>http://20.127.164.138:8082/artifactory/libs-snapshot/</url>
+	      <url>http://20.127.164.138:8082/artifactory/libs-snapshot-local/</url>
 	    </snapshotRepository>
 	    
 	</distributionManagement>
