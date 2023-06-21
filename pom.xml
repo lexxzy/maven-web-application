@@ -98,7 +98,7 @@
 	    </repository>
 	    
 	    <snapshotRepository>
-	      <id>snapshots</id>
+	      <id>snapshot</id>
 	      <name>Landmark Technologies Snapshot Nexus Repository </name>
 	      <url>http://20.127.164.138:8082/artifactory/libs-snapshot-local/</url>
 	    </snapshotRepository>
