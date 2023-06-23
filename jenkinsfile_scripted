@@ -1,0 +1,33 @@
+node{
+    def maven3 = tool name : 'maven3'
+    
+    stage('Cloning Repo'){
+        git credentialsId: 'gitssh', url: 'git@github.com:lexxzy/maven-web-application.git'
+    }
+    stage('Building and Test'){
+        sh "${maven3}/bin/mvn package"
+        sh "echo Build Successful"
+    }
+    stage("COde Analysis"){
+        sh "${maven3}/bin/mvn sonar:sonar"
+        
+    }
+    stage("Deploy Artifact"){
+        sh "${maven3}/bin/mvn deploy"
+    }
+    stage('Deploy to UAT'){
+        deploy adapters: [tomcat9(credentialsId: 'newtom', path: '', url: 'http://54.173.79.21:8080/')], contextPath: null, war: 'target/*war'
+    }
+    stage("Manual Approval"){
+        sh "echo 'Project ready for review'"
+        timeout(time:5, unit:'HOURS') { 
+        input message: "Application is ready for a review"
+        }
+    }
+    stage("Deploy to production"){
+        deploy adapters: [tomcat9(credentialsId: 'newtom', path:'', url: 'http://54.173.79.21:8080/')], contextPath: null, war: 'target/*war'
+    }
+    stage('Build Notification'){
+        emailext body: 'Hello Team', recipientProviders: [developers(), requestor(), previous()], subject: 'Build Status', to: 'adewopolekan@yahoo.com'
+    }
+}
