@@ -33,9 +33,7 @@ pipeline {
         }
 
         stage("Deploy to Tomcat UAT") {
-            steps {
                 deploy adapters: [tomact9(credentialsId: 'newtom', path: '', url: 'http://3.83.212.85:8080')], contextPath: null, war: 'target/*war'
-            }
         }
 
         stage("Manual Approval") {
@@ -45,5 +43,9 @@ pipeline {
                 }
             }
         }
+        stage("Deploy to Tomcat prod") {
+                deploy adapters: [tomact9(credentialsId: 'newtom', path: '', url: 'http://3.83.212.85:8080')], contextPath: null, war: 'target/*war'
+        }
+
     }
 }
