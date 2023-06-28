@@ -1,0 +1,44 @@
+pipeline{
+    agent any 
+    tools {
+        maven3 "maven3"
+    }
+    stages{
+
+        stage("Cloning from SCM"){
+            steps{
+                 git credentialsId: 'gitssh', url: 'git@github.com:lexxzy/maven-web-application.git'
+            }
+        }
+        stage("Build"){
+           steps{
+            sh "echo 'Building is starting '"
+            sh "mvn package"
+           }
+        }
+        stage("SonarQube Report"){
+            steps{
+                sh "echo 'Code scanning and analysis starting' "
+               // sh " mvn sonar:sonar"
+            }
+        stage("Upload Into Jfrog"){
+            steps{
+                sh "echo 'uploading Artifacts to Artifactory'"
+                sh "mvn deploy"
+            }
+        stage("deploy to tomcat UAT"){
+            steps{
+                deploy adapters: [tomact9(credentialsId: 'newtom', path: '', url: 'http://3.83.212.85:8080' )], contextPath: null , war: 'target/*war'
+            }
+        }
+        stage("Manual Approval"){
+            steps{
+                timeout(time:5, unit: 'HOURS'){
+                    input message:  "Application ready for review"
+                }
+            }
+        }
+        }
+        }
+    }
+}
